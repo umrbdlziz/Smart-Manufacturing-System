@@ -7,5 +7,8 @@ export default defineConfig({
   server: {
     host: "0.0.0.0", // Bind to all network interfaces
     port: 5175, // The port Vite server runs on
+    proxy: {
+      "/api": "http://localhost:3001", // Proxy API requests to the backend server
+    },
   },
 });
