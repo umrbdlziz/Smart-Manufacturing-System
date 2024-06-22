@@ -1,23 +1,20 @@
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
-import { Typography } from "@mui/material";
+
+import {
+  RealTimeMonitoring,
+  JobAssignment,
+  Dashboard,
+  ProcessControl,
+} from "./pages";
 
 function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Typography>Dashboard</Typography>} />
-        <Route
-          path="/real-time-monitoring"
-          element={<Typography>Real Time Monitoring</Typography>}
-        />
-        <Route
-          path="/job-assignment"
-          element={<Typography>Job Assignment</Typography>}
-        />
-        <Route
-          path="/process-control"
-          element={<Typography>process control</Typography>}
-        />
+        <Route path="/" element={<Dashboard />} />
+        <Route path="/real-time-monitoring" element={<RealTimeMonitoring />} />
+        <Route path="/job-assignment" element={<JobAssignment />} />
+        <Route path="/process-control" element={<ProcessControl />} />
       </Routes>
     </Router>
   );
