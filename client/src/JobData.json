@@ -1,0 +1,34 @@
+[
+  {
+    "Job name": "ABC",
+    "Job description": "End mill 3mm",
+    "Qty": 30,
+    "Batch number": "B1234",
+    "Process": "cleaning",
+    "Machine": "SN 888"
+  },
+  {
+    "Job name": "DEF",
+    "Job description": "End mill 3mm",
+    "Qty": 13,
+    "Batch number": "B1234",
+    "Process": "cleaning",
+    "Machine": "SN 888"
+  },
+  {
+    "Job name": "Job name 1",
+    "Job description": "End mill 3mm",
+    "Qty": 13,
+    "Batch number": "B1234",
+    "Process": "cleaning",
+    "Machine": "SN 888"
+  },
+  {
+    "Job name": "GHI",
+    "Job description": "End mill 3mm",
+    "Qty": 4,
+    "Batch number": "B1234",
+    "Process": "cleaning",
+    "Machine": "SN 888"
+  }
+]
