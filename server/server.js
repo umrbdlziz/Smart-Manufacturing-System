@@ -3,6 +3,7 @@ const cors = require("cors");
 const path = require("path");
 const http = require("http");
 require("dotenv").config();
+const db = require("./models/createdb");
 
 const app = express();
 const port = process.env.PORT || 5000;
@@ -26,8 +27,12 @@ app.use(
   })
 );
 const rmf_api = require("./api/rmf");
+const process_api = require("./api/process");
+const job_api = require("./api/job");
 
 app.use("/api/rmf", rmf_api);
+app.use("/api/process", process_api);
+app.use("/api/job", job_api);
 app.get("/api", (req, res) => {
   res.send("Hello from the API");
 });
@@ -84,4 +89,20 @@ io.on("connection", (socket) => {
 
 server.listen(port, () => {
   console.log(`Server is running on port ${port}`);
+});
+
+// Close database when server is shut down
+process.on("SIGINT", () => {
+  console.log("Server is shutting down...");
+
+  // Close the database connection
+  db.close((err) => {
+    if (err) {
+      console.error("Error closing database connection:", err);
+      process.exit(1);
+    } else {
+      console.log("Database connection closed.");
+      process.exit();
+    }
+  });
 });

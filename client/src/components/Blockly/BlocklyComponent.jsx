@@ -85,14 +85,6 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
     },
   ]);
 
-  // javascriptGenerator.forBlock["level"] = function (block) {
-  //   const levelName = block.getFieldValue("level_name");
-  //   const rows = block.getFieldValue("rows");
-  //   const columns = block.getFieldValue("columns");
-
-  //   return `"${levelName}":{"${rows}":${columns}},`;
-  // };
-
   javascriptGenerator.forBlock["movement"] = function (block) {
     const placeName = block.getFieldValue("place_name");
     return "move to " + placeName;
@@ -119,27 +111,16 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
   };
 
   const generateCode = () => {
-    // Initialize an empty array to hold code snippets
     let codeSnippets = [];
 
-    // Get all blocks in the main workspace
     const blocks = Blockly.getMainWorkspace().getAllBlocks(false);
 
-    // Iterate over each block and generate code for it
     blocks.forEach((block) => {
-      // Use the existing generator for the block type
       const blockCode = javascriptGenerator.forBlock[block.type](block);
-      // Push the generated code snippet (if any) into the array
       if (blockCode) {
         codeSnippets.push(blockCode);
       }
     });
-
-    // Handle the array of code snippets as needed
-    console.log(codeSnippets); // Example: Log the array
-
-    // If you need to save or further process the array, do so here
-    // For example, converting array to a JSON string to save
     handlePatternSave(JSON.stringify(codeSnippets));
   };
 
