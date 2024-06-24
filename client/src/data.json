@@ -1,0 +1,23 @@
+[
+  {
+    "machine": "888",
+    "job_description": "End mill 3mm",
+    "quantity": "10 remaining pcs",
+    "next_process": "Cleaning",
+    "status": ["running", "setup", "down", "alarm"]
+  },
+  {
+    "machine": "889",
+    "job_description": "Drill bit 5mm",
+    "quantity": "4 remaining pcs",
+    "next_process": "Inspection",
+    "status": ["running", "setup", "down", "alarm"]
+  },
+  {
+    "machine": "890",
+    "job_description": "Lathe tool 10mm",
+    "quantity": "2 remaining pcs",
+    "next_process": "Packaging",
+    "status": ["running", "setup", "down", "alarm"]
+  }
+]

@@ -6,10 +6,12 @@ import {
   Dashboard,
   ProcessControl,
 } from "./pages";
+import { TopBar } from "./utils";
 
 function App() {
   return (
     <Router>
+      <TopBar />
       <Routes>
         <Route path="/" element={<Dashboard />} />
         <Route path="/real-time-monitoring" element={<RealTimeMonitoring />} />

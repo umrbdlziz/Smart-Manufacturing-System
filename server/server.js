@@ -25,7 +25,9 @@ app.use(
     credentials: true,
   })
 );
+const rmf_api = require("./api/rmf");
 
+app.use("/api/rmf", rmf_api);
 app.get("/api", (req, res) => {
   res.send("Hello from the API");
 });
@@ -40,9 +42,30 @@ io.on("connection", (socket) => {
     const socket = clientIO(process.env.RMF_URL);
 
     function subscribeToRoom(roomName) {
-      console.log(`Subscribing to room ${roomName}`);
+      // console.log(`Subscribing to room ${roomName}`);
       socket.emit("subscribe", { room: roomName });
     }
+
+    // Fetch fleet names from the /fleet endpoint
+    fetch(`${process.env.RMF_URL}/fleets`)
+      .then((response) => {
+        if (!response.ok) {
+          throw new Error("Network response was not ok");
+        }
+        return response.json();
+      })
+      .then((fleetNames) => {
+        // assuming the response data is an array of fleet names
+
+        // Subscribe to each fleet's state
+        fleetNames.forEach((fleetName) => {
+          subscribeToRoom(`/fleets/${fleetName.name}/state`);
+          socket.on(`/fleets/${fleetName.name}/state`, (message) => {
+            io.emit(`${fleetName.name}_state`, message);
+          });
+        });
+      })
+      .catch((err) => console.log(err.message));
 
     function handleMapData(message) {
       io.emit("building_map", message);

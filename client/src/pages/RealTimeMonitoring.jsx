@@ -1,27 +1,21 @@
-import { useEffect } from "react";
-import io from "socket.io-client";
+import { Box, Grid } from "@mui/material";
+import { LiveMap, MachineStatus } from "../components";
 
 const RealTimeMonitoring = () => {
-  useEffect(() => {
-    const socket = io();
-    socket.on("connect", () => {
-      console.log("Connected to server");
-    });
-
-    socket.on("building_map", (data) => {
-      console.log("Building Map Data: ", data);
-    });
-
-    socket.on("connect_error", (error) => {
-      console.log(error);
-    });
-
-    return () => {
-      socket.disconnect();
-    };
-  }, []);
-
-  return <div>RealTimeMonitoring</div>;
+  return (
+    <>
+      <Box m={2}>
+        <Grid container spacing={3}>
+          <Grid item xs={12} md={9}>
+            <LiveMap />
+          </Grid>
+          <Grid item xs={12} md={3}>
+            <MachineStatus />
+          </Grid>
+        </Grid>
+      </Box>
+    </>
+  );
 };
 
 export default RealTimeMonitoring;
