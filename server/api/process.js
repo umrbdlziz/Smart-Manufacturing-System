@@ -5,7 +5,7 @@ const db = require("../models/connectdb");
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
 
-app.get("/get_processes", async (req, res) => {
+app.get("/process", async (req, res) => {
   try {
     const processSQL = "SELECT * FROM processes";
     const processResult = await db.executeAllSQL(processSQL, []);
@@ -21,7 +21,7 @@ app.get("/get_processes", async (req, res) => {
   }
 });
 
-app.post("/add_process", async (req, res) => {
+app.post("/process", async (req, res) => {
   const { processSeq } = req.body;
   try {
     // const processSeqJson = JSON.stringify(processSeq);

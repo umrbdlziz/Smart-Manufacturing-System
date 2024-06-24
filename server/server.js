@@ -31,8 +31,8 @@ const process_api = require("./api/process");
 const job_api = require("./api/job");
 
 app.use("/api/rmf", rmf_api);
-app.use("/api/process", process_api);
-app.use("/api/job", job_api);
+app.use("/api", process_api);
+app.use("/api", job_api);
 app.get("/api", (req, res) => {
   res.send("Hello from the API");
 });

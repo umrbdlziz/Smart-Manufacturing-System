@@ -40,11 +40,12 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
     );
     db.run(
       `CREATE TABLE "processes" (      
-        "process_id"	TEXT NOT NULL PRIMARY KEY ,
+        "process_id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         "process_sequence"	TEXT NOT NULL
         );`,
       (err) => {
         if (err) {
+          // console.log(err.message);
           // console.log("Table already exist");
         } else {
           console.log("processes table has been created");
@@ -53,17 +54,18 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
     );
     db.run(
       `CREATE TABLE "jobs" (
-        "job_id"	TEXT NOT NULL PRIMARY KEY AUTOINCREMENT,
-        "process_id"	TEXT NOT NULL,
+        "job_id"	INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
         "job_name"	TEXT NOT NULL,
-        "description"	TEXT,
-        "status"	TEXT,
-        "created_at"	TEXT,
-        "updated_at"	TEXT,
+        "job_description"	TEXT NOT NULL,
+        "machine"	TEXT NOT NULL,
+        "qty"	INTEGER NOT NULL,
+        "batch_number"	TEXT NOT NULL,
+        "process_id"	INTEGER NOT NULL,
         FOREIGN KEY("process_id") REFERENCES "processes"("process_id")
         );`,
       (err) => {
         if (err) {
+          // console.log(err.message);
           // console.log("Table already exist");
         } else {
           console.log("jobs table has been created");

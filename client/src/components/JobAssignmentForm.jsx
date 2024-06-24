@@ -13,6 +13,7 @@ import {
   MenuItem,
 } from "@mui/material";
 import { Add, Delete } from "@mui/icons-material";
+import axios from "axios";
 
 const JobAssignmentForm = () => {
   const [formData, setFormData] = useState({
@@ -20,7 +21,7 @@ const JobAssignmentForm = () => {
     jobDescription: "",
     qty: "",
     batchNumber: "",
-    process: [{ name: "", remarks: "" }],
+    process: [""], // Changed to array of strings
     machine: "",
   });
 
@@ -32,10 +33,9 @@ const JobAssignmentForm = () => {
     }));
   };
 
-  const handleProcessChange = (index, e) => {
-    const { name, value } = e.target;
+  const handleProcessChange = (index, value) => {
     const processes = [...formData.process];
-    processes[index][name] = value;
+    processes[index] = value; // Update the string at the specific index
     setFormData((prev) => ({
       ...prev,
       process: processes,
@@ -45,7 +45,7 @@ const JobAssignmentForm = () => {
   const addProcess = () => {
     setFormData((prev) => ({
       ...prev,
-      process: [...prev.process, { name: "", remarks: "" }],
+      process: [...prev.process, ""], // Add an empty string
     }));
   };
 
@@ -61,6 +61,23 @@ const JobAssignmentForm = () => {
   const handleSubmit = (e) => {
     e.preventDefault();
     console.log(formData);
+    axios
+      .post("http://192.168.1.48:5003/api/jobs", formData)
+      .then((response) => {
+        console.log(response.data);
+      })
+      .catch((err) => {
+        console.error("Error submitting job form:", err.message);
+      });
+
+    setFormData({
+      jobName: "",
+      jobDescription: "",
+      qty: "",
+      batchNumber: "",
+      process: [""], // Reset to initial state with an empty string
+      machine: "",
+    });
   };
 
   return (
@@ -108,9 +125,8 @@ const JobAssignmentForm = () => {
               <Box key={index} display="flex" alignItems="center" my={1}>
                 <TextField
                   label={`Process ${index + 1}`}
-                  name="name"
-                  value={process.name}
-                  onChange={(e) => handleProcessChange(index, e)}
+                  value={process}
+                  onChange={(e) => handleProcessChange(index, e.target.value)}
                   fullWidth
                   margin="normal"
                 />

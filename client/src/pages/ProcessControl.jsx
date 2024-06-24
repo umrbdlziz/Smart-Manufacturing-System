@@ -2,9 +2,8 @@ import BlocklyComponent, { Block } from "../components/Blockly";
 import axios from "axios";
 
 const handlePatternSave = (code) => {
-  console.log(code);
   axios
-    .post("http://192.168.1.48:5003/api/process/add_process", {
+    .post("http://192.168.1.48:5003/api/process", {
       processSeq: code,
     })
     .catch((err) => {
