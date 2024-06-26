@@ -1,14 +1,17 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Paper, Typography, Grid, Box } from "@mui/material";
 import axios from "axios";
 
+import { ServerContext } from "../context";
+
 const JobDetails = () => {
+  const { SERVER_URL } = useContext(ServerContext);
   const [jobData, setJobData] = useState(null);
 
   useEffect(() => {
     const fetchData = async () => {
       try {
-        const response = await axios.get("http://192.168.1.48:5003/api/jobs");
+        const response = await axios.get(`${SERVER_URL}/api/jobs`);
         setJobData(response.data);
       } catch (error) {
         console.error("Error fetching job data:", error);
@@ -16,7 +19,7 @@ const JobDetails = () => {
     };
 
     fetchData();
-  }, []);
+  }, [SERVER_URL]);
 
   return (
     <Box m={2}>

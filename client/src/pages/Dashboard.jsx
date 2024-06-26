@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useContext } from "react";
 import axios from "axios";
 import {
   Box,
@@ -25,8 +25,10 @@ import {
 } from "@mui/icons-material";
 
 import { AddMachineBtn } from "../components";
+import { ServerContext } from "../context";
 
 const Dashboard = () => {
+  const { SERVER_URL } = useContext(ServerContext);
   const [machines, setMachines] = useState([]);
   const [open, setOpen] = useState(false);
   const [waypoints, setWaypoints] = useState([]);
@@ -46,7 +48,7 @@ const Dashboard = () => {
 
   useEffect(() => {
     axios
-      .get(`http://192.168.1.48:5003/api/machine-info`)
+      .get(`${SERVER_URL}/api/machine-info`)
       .then((response) => {
         // console.log(response.data);
         setMachines(response.data);
@@ -54,7 +56,7 @@ const Dashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, [machines]);
+  }, [machines, SERVER_URL]);
 
   // get the waypoint from building map rmf endpoint
   useEffect(() => {
@@ -63,7 +65,7 @@ const Dashboard = () => {
     };
 
     axios
-      .get(`http://192.168.1.48:5003/api/rmf/building-map`)
+      .get(`${SERVER_URL}/api/rmf/building-map`)
       .then((response) => {
         setWaypoints(
           findWaypoints(response.data.map.levels[0].nav_graphs[0].vertices)
@@ -72,11 +74,11 @@ const Dashboard = () => {
       .catch((error) => {
         console.log(error);
       });
-  }, []);
+  }, [SERVER_URL]);
 
   useEffect(() => {
     axios
-      .get(`http://192.168.1.48:5003/api/machines`)
+      .get(`${SERVER_URL}/api/machines`)
       .then((response) => {
         // console.log(response.data);
       })
@@ -87,7 +89,7 @@ const Dashboard = () => {
 
   const handleAddMachine = () => {
     axios
-      .post("http://192.168.1.48:5003/api/machines", {
+      .post(`${SERVER_URL}/api/machines`, {
         machineName: formData.machineName,
         machinePort: formData.machinePort,
         machineUrl: `opc.tcp://${formData.machineName}:${formData.machinePort}/`,

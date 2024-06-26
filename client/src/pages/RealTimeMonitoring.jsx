@@ -10,7 +10,7 @@ const RealTimeMonitoring = () => {
             <LiveMap />
           </Grid>
           <Grid item xs={12} md={3}>
-            <MachineStatus />
+            {/* <MachineStatus /> */}
           </Grid>
         </Grid>
       </Box>

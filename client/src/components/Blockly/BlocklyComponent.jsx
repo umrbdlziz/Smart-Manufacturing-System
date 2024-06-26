@@ -1,5 +1,5 @@
 import { useEffect, useRef } from "react";
-import { Button, Box } from "@mui/material";
+import { Button, Box, Typography } from "@mui/material";
 import * as Blockly from "blockly/core";
 import { javascriptGenerator } from "blockly/javascript";
 import "blockly/blocks";
@@ -24,12 +24,17 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
   Blockly.defineBlocksWithJsonArray([
     {
       type: "movement",
-      message0: "Move to %1",
+      message0: "Move from %1 to %2",
       args0: [
         {
           type: "field_input",
-          name: "place_name",
+          name: "place_from",
           text: "L1",
+        },
+        {
+          type: "field_input",
+          name: "place_to",
+          text: "L2",
         },
       ],
       previousStatement: null,
@@ -39,26 +44,14 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
       helpUrl: "",
     },
     {
-      type: "unloading",
-      message0: "Unload item",
-      previousStatement: null,
-      nextStatement: null,
-      colour: 153,
-      tooltip: "Unload the item from the robot",
-      helpUrl: "",
-    },
-    {
-      type: "loading",
-      message0: "Load item",
-      previousStatement: null,
-      nextStatement: null,
-      colour: 253,
-      tooltip: "Load the item to the robot",
-      helpUrl: "",
-    },
-    {
       type: "grinding",
-      message0: "Grind item",
+      message0: "Grind item %1",
+      args0: [
+        {
+          type: "input_value",
+          name: "item_info",
+        },
+      ],
       previousStatement: null,
       nextStatement: null,
       colour: 353,
@@ -67,7 +60,13 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
     },
     {
       type: "cleaning",
-      message0: "Clean item",
+      message0: "Clean item %1",
+      args0: [
+        {
+          type: "input_value",
+          name: "item_info",
+        },
+      ],
       previousStatement: null,
       nextStatement: null,
       colour: 453,
@@ -75,39 +74,58 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
       helpUrl: "",
     },
     {
-      type: "inspection",
-      message0: "Inspect item",
-      previousStatement: null,
-      nextStatement: null,
-      colour: 13,
-      tooltip: "Inspect the item",
+      type: "item",
+      message0: "Item name: %1 quantity: %2",
+      args0: [
+        {
+          type: "field_input",
+          name: "item_name",
+          text: "item",
+        },
+        {
+          type: "field_number",
+          name: "quantity",
+          value: 1,
+          precision: 1,
+        },
+      ],
+      output: null,
+      colour: 253,
+      tooltip: "item",
       helpUrl: "",
     },
   ]);
 
   javascriptGenerator.forBlock["movement"] = function (block) {
-    const placeName = block.getFieldValue("place_name");
-    return "move to " + placeName;
+    const placeTo = block.getFieldValue("place_to");
+    const placeFrom = block.getFieldValue("place_from");
+    return `move from ${placeFrom} to ${placeTo}`;
   };
 
-  javascriptGenerator.forBlock["unloading"] = function () {
-    return "unload";
+  javascriptGenerator.forBlock["grinding"] = function (block) {
+    const value_item = javascriptGenerator.valueToCode(
+      block,
+      "item_info",
+      javascriptGenerator.ORDER_ATOMIC
+    );
+    return `grind: {${value_item}}`;
   };
 
-  javascriptGenerator.forBlock["loading"] = function () {
-    return "load";
+  javascriptGenerator.forBlock["cleaning"] = function (block) {
+    const value_item = javascriptGenerator.valueToCode(
+      block,
+      "item_info",
+      javascriptGenerator.ORDER_ATOMIC
+    );
+    return `clean: {${value_item}}`;
   };
 
-  javascriptGenerator.forBlock["grinding"] = function () {
-    return "grind";
-  };
+  javascriptGenerator.forBlock["item"] = function (block) {
+    const item_name = block.getFieldValue("item_name");
+    const quantity = block.getFieldValue("quantity");
 
-  javascriptGenerator.forBlock["cleaning"] = function () {
-    return "clean";
-  };
-
-  javascriptGenerator.forBlock["inspection"] = function () {
-    return "inspect";
+    const code = `"item_name": "${item_name}", "quantity": ${quantity}`;
+    return [code, javascriptGenerator.ORDER_ATOMIC];
   };
 
   const generateCode = () => {
@@ -117,7 +135,7 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
 
     blocks.forEach((block) => {
       const blockCode = javascriptGenerator.forBlock[block.type](block);
-      if (blockCode) {
+      if (blockCode && block.type !== "item") {
         codeSnippets.push(blockCode);
       }
     });
@@ -125,7 +143,7 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
   };
 
   return (
-    <Box>
+    <Box display="flex" flexDirection="column" gap={2}>
       <Box
         display="flex"
         flexDirection="row"
@@ -133,7 +151,7 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
         alignItems="center"
         justifyContent="space-between"
       >
-        <h2>Process Control</h2>
+        <Typography variant="h4">Process Control</Typography>
         <Button
           variant="contained"
           color="primary"

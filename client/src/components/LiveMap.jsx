@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, useContext } from "react";
 import { Typography, Paper } from "@mui/material";
 import io from "socket.io-client";
 import axios from "axios";
@@ -17,8 +17,10 @@ import "leaflet-rotatedmarker";
 
 import { CustomSnackbar } from "../utils";
 import FleetIcon from "/FleetIcon.svg";
+import { ServerContext } from "../context";
 
 const LiveMap = () => {
+  const { SERVER_URL } = useContext(ServerContext);
   const [robotState, setRobotState] = useState([{}]);
   const [mapUrl, setMapUrl] = useState("");
   const [imgXY, setImgXY] = useState({ x: 0, y: 0 });
@@ -38,13 +40,11 @@ const LiveMap = () => {
   const [openSnackbar, setOpenSnackbar] = useState(false);
 
   useEffect(() => {
-    // const socket = io("http://192.168.1.48:5003");
-    const socket = io();
+    const socket = io(SERVER_URL);
 
     // Fetch fleet names from the /fleet endpoint
     axios
-      // .get("http://192.168.1.48:5003/api/rmf/get_fleets")
-      .get("/api/rmf/get_fleets")
+      .get(`${SERVER_URL}/api/rmf/get_fleets`)
       .then((response) => {
         console.log(response.data);
         const fleetNames = response.data.fleets; // assuming the response data is an array of fleet names
@@ -75,7 +75,7 @@ const LiveMap = () => {
     return () => {
       socket.disconnect();
     };
-  }, [mapUrl]);
+  }, [mapUrl, SERVER_URL]);
 
   useEffect(() => {
     const img = new Image();

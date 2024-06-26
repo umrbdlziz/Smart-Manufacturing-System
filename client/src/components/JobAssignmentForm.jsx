@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useContext } from "react";
 import {
   TextField,
   Button,
@@ -15,7 +15,11 @@ import {
 import { Add, Delete } from "@mui/icons-material";
 import axios from "axios";
 
+import { ServerContext } from "../context";
+
 const JobAssignmentForm = () => {
+  const { SERVER_URL } = useContext(ServerContext);
+
   const [formData, setFormData] = useState({
     jobName: "",
     jobDescription: "",
@@ -62,7 +66,7 @@ const JobAssignmentForm = () => {
     e.preventDefault();
     console.log(formData);
     axios
-      .post("http://192.168.1.48:5003/api/jobs", formData)
+      .post(`${SERVER_URL}/api/jobs`, formData)
       .then((response) => {
         console.log(response.data);
       })
