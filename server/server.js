@@ -29,10 +29,12 @@ app.use(
 const rmf_api = require("./api/rmf");
 const process_api = require("./api/process");
 const job_api = require("./api/job");
+const machine_api = require("./api/machine");
 
 app.use("/api/rmf", rmf_api);
 app.use("/api", process_api);
 app.use("/api", job_api);
+app.use("/api", machine_api);
 app.get("/api", (req, res) => {
   res.send("Hello from the API");
 });
@@ -43,6 +45,7 @@ app.get("*", (req, res) => {
 });
 
 io.on("connection", (socket) => {
+  console.log("Clinet connected");
   try {
     const socket = clientIO(process.env.RMF_URL);
 
@@ -92,7 +95,7 @@ server.listen(port, () => {
 });
 
 // Close database when server is shut down
-process.on("SIGINT", () => {
+process.on("SIGINT", async () => {
   console.log("Server is shutting down...");
 
   // Close the database connection
@@ -102,7 +105,10 @@ process.on("SIGINT", () => {
       process.exit(1);
     } else {
       console.log("Database connection closed.");
-      process.exit();
+      // Delay process.exit() to ensure all SIGINT handlers have a chance to run
+      setTimeout(() => process.exit(), 1000);
     }
   });
 });
+
+module.exports = { io };

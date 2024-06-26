@@ -32,4 +32,32 @@ app.get("/get_fleets", async (req, res) => {
   }
 });
 
+app.get("/building-map", async (req, res) => {
+  let data = {};
+
+  try {
+    const mapResponse = await fetch(`${process.env.RMF_URL}/building_map`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    if (!mapResponse.ok) {
+      throw new Error("Network response was not ok");
+    }
+
+    const mapData = await mapResponse.json();
+
+    data = {
+      map: mapData,
+    };
+
+    res.send(data);
+  } catch (error) {
+    console.error("Error getting building map:", error.message);
+    return;
+  }
+});
+
 module.exports = app;

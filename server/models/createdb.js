@@ -72,6 +72,22 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         }
       }
     );
+    db.run(
+      `CREATE TABLE "machines" (
+      "machine_name"  TEXT NOT NULL PRIMARY KEY,
+      "machine_port"  INTEGER NOT NULL,
+      "machine_url"    TEXT NOT NULL,
+      "waypoint" TEXT NOT NULL
+      );`,
+      (err) => {
+        if (err) {
+          // console.log(err.message);
+          // console.log("Table already exist");
+        } else {
+          console.log("machines table has been created");
+        }
+      }
+    );
   }
 });
 
