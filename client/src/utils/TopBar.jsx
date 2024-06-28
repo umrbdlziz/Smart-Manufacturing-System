@@ -18,6 +18,7 @@ import DashboardIcon from "@mui/icons-material/Dashboard";
 import WorkIcon from "@mui/icons-material/Work";
 import MonitorIcon from "@mui/icons-material/Monitor";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
+import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
 
 import NanoIcon from "/NanoIcon.png";
 import NanoLogo from "/CompanyLogo.png";
@@ -62,6 +63,12 @@ const CustomDrawer = ({ drawerOpen, toggleDrawer }) => {
               <DashboardIcon style={{ color: "#EFF1ED" }} />
             </ListItemIcon>
             <ListItemText primary="Dashboard" />
+          </ListItem>
+          <ListItem button onClick={() => handleUserClick("/machine-info")}>
+            <ListItemIcon>
+              <PrecisionManufacturingIcon style={{ color: "#EFF1ED" }} />
+            </ListItemIcon>
+            <ListItemText primary="Machine Info" />
           </ListItem>
           <ListItem
             button

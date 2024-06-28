@@ -16,6 +16,7 @@
     "@mui/icons-material": "^5.15.20",
     "@mui/material": "^5.15.20",
     "@mui/styled-engine-sc": "^6.0.0-alpha.18",
+    "@mui/x-charts": "^7.7.1",
     "axios": "^1.7.2",
     "blockly": "^11.1.1",
     "leaflet": "^1.9.4",

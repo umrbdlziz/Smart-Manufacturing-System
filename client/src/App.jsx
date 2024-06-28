@@ -5,6 +5,7 @@ import {
   JobAssignment,
   Dashboard,
   ProcessControl,
+  MachineInfo,
 } from "./pages";
 import { TopBar } from "./utils";
 import { ServerContext } from "./context";
@@ -24,6 +25,7 @@ function App() {
           />
           <Route path="/job-assignment" element={<JobAssignment />} />
           <Route path="/process-control" element={<ProcessControl />} />
+          <Route path="/machine-info" element={<MachineInfo />} />
         </Routes>
       </Router>
     </ServerContext.Provider>

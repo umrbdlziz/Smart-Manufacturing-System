@@ -24,7 +24,7 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
   Blockly.defineBlocksWithJsonArray([
     {
       type: "movement",
-      message0: "Move from %1 to %2",
+      message0: "Deliver from %1 to %2",
       args0: [
         {
           type: "field_input",

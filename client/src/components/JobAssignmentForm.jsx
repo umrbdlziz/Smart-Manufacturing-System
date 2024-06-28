@@ -89,7 +89,7 @@ const JobAssignmentForm = () => {
       <Container component="main" maxWidth="sm">
         <Paper elevation={3} sx={{ p: 3 }}>
           <Typography variant="h5" align="center" gutterBottom>
-            Job Form
+            Job Order
           </Typography>
           <Box component="form" onSubmit={handleSubmit}>
             <TextField
