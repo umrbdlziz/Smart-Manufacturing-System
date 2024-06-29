@@ -1,4 +1,4 @@
-import { useState, useContext } from "react";
+import { useState, useContext, useEffect } from "react";
 import {
   TextField,
   Button,
@@ -23,10 +23,21 @@ const JobAssignmentForm = () => {
   const [formData, setFormData] = useState({
     jobName: "",
     jobDescription: "",
-    qty: "",
     batchNumber: "",
     process: [""], // Changed to array of strings
     machine: "",
+  });
+  const [processData, setProcessData] = useState([]);
+
+  useEffect(() => {
+    axios
+      .get(`${SERVER_URL}/api/process`)
+      .then((response) => {
+        setProcessData(response.data);
+      })
+      .catch((err) => {
+        console.error("Error getting processes:", err.message);
+      });
   });
 
   const handleChange = (e) => {
@@ -77,7 +88,6 @@ const JobAssignmentForm = () => {
     setFormData({
       jobName: "",
       jobDescription: "",
-      qty: "",
       batchNumber: "",
       process: [""], // Reset to initial state with an empty string
       machine: "",
@@ -109,15 +119,6 @@ const JobAssignmentForm = () => {
               margin="normal"
             />
             <TextField
-              label="Quantity"
-              name="qty"
-              value={formData.qty}
-              onChange={handleChange}
-              fullWidth
-              margin="normal"
-              type="number"
-            />
-            <TextField
               label="Batch Number"
               name="batchNumber"
               value={formData.batchNumber}
@@ -128,12 +129,19 @@ const JobAssignmentForm = () => {
             {formData.process.map((process, index) => (
               <Box key={index} display="flex" alignItems="center" my={1}>
                 <TextField
+                  select
                   label={`Process ${index + 1}`}
                   value={process}
                   onChange={(e) => handleProcessChange(index, e.target.value)}
                   fullWidth
                   margin="normal"
-                />
+                >
+                  {processData.map((step, index) => (
+                    <MenuItem key={index} value={step.process_id}>
+                      {step.process_id}
+                    </MenuItem>
+                  ))}
+                </TextField>
                 <IconButton onClick={() => removeProcess(index)}>
                   <Delete />
                 </IconButton>
@@ -158,8 +166,9 @@ const JobAssignmentForm = () => {
                 value={formData.machine}
                 onChange={handleChange}
               >
-                <MenuItem value="SN 888">SN 888</MenuItem>
-                {/* Add more machine options here if needed */}
+                <MenuItem value="GrindSmart620XS">GrindSmart620XS</MenuItem>
+                <MenuItem value="GrindSmart528XS">GrindSmart528XS</MenuItem>
+                <MenuItem value="GrindSmart830XW">GrindSmart830XW</MenuItem>
               </Select>
             </FormControl>
             <Button

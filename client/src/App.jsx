@@ -10,7 +10,7 @@ import {
 import { TopBar } from "./utils";
 import { ServerContext } from "./context";
 
-const SERVER_URL = "http://192.168.1.48:5003";
+const SERVER_URL = "http://192.168.0.208:5003";
 
 function App() {
   return (

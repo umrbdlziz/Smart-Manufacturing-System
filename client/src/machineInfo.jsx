@@ -6,7 +6,7 @@ export const machineData = [
     totalQty: 500,
     upTime: 120,
     downTime: 10,
-    energyUsed: 1500,
+    energyUsed: 1300,
   },
   {
     id: 2,
@@ -15,7 +15,7 @@ export const machineData = [
     totalQty: 400,
     upTime: 110,
     downTime: 15,
-    energyUsed: 1400,
+    energyUsed: 700,
   },
   {
     id: 3,

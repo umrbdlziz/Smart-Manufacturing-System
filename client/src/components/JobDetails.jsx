@@ -1,5 +1,15 @@
 import { useEffect, useState, useContext } from "react";
-import { Paper, Typography, Grid, Box } from "@mui/material";
+import {
+  Paper,
+  Typography,
+  Table,
+  TableBody,
+  TableCell,
+  TableContainer,
+  TableHead,
+  TableRow,
+  Box,
+} from "@mui/material";
 import axios from "axios";
 
 import { ServerContext } from "../context";
@@ -22,53 +32,55 @@ const JobDetails = () => {
   }, [SERVER_URL]);
 
   return (
-    <Box m={2}>
+    <Box m={2} p={10}>
       <Typography variant="h5" align="center" gutterBottom>
         Job Details
       </Typography>
-      <Grid container spacing={2}>
-        {jobData && jobData.length === 0 && (
-          <Box
-            display="flex"
-            justifyContent="center"
-            alignItems="center"
-            height="50vh"
-            width="50vw"
-          >
-            <Typography variant="h6">No job details found.</Typography>
-          </Box>
-        )}
-        {jobData ? (
-          jobData.map((job, index) => (
-            <Grid item xs={12} md={6} xl={4} key={index}>
-              <Paper elevation={3} sx={{ p: 3, mt: 3 }}>
-                <Typography variant="subtitle1" gutterBottom>
-                  <strong>Job Name:</strong> {job.job_name}
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  <strong>Job Description:</strong> {job.job_description}
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  <strong>Quantity:</strong> {job.qty}
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  <strong>Batch Number:</strong> {job.batch_number}
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  <strong>Process:</strong> {job.process_id}
-                </Typography>
-                <Typography variant="subtitle1" gutterBottom>
-                  <strong>Machine:</strong> {job.machine}
-                </Typography>
-              </Paper>
-            </Grid>
-          ))
-        ) : (
-          <Typography variant="subtitle1" align="center">
-            Loading job details...
-          </Typography>
-        )}
-      </Grid>
+      {jobData ? (
+        <TableContainer component={Paper}>
+          <Table>
+            <TableHead>
+              <TableRow>
+                <TableCell>
+                  <strong>Bil</strong>
+                </TableCell>{" "}
+                {/* Add this line */}
+                <TableCell>
+                  <strong>Job Name</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Job Description</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Batch Number</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Process</strong>
+                </TableCell>
+                <TableCell>
+                  <strong>Machine</strong>
+                </TableCell>
+              </TableRow>
+            </TableHead>
+            <TableBody>
+              {jobData.map((job, index) => (
+                <TableRow key={index}>
+                  <TableCell>{index + 1}</TableCell> {/* Add this line */}
+                  <TableCell>{job.job_name}</TableCell>
+                  <TableCell>{job.job_description}</TableCell>
+                  <TableCell>{job.batch_number}</TableCell>
+                  <TableCell>{job.process_id}</TableCell>
+                  <TableCell>{job.machine}</TableCell>
+                </TableRow>
+              ))}
+            </TableBody>
+          </Table>
+        </TableContainer>
+      ) : (
+        <Typography variant="subtitle1" align="center">
+          Loading job details...
+        </Typography>
+      )}
     </Box>
   );
 };

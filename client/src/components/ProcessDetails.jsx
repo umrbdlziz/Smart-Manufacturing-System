@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from "react";
 import { Box, Card, CardContent, Grid, Paper, Typography } from "@mui/material";
-import { DirectionsRun, Build, LocalDrink } from "@mui/icons-material";
+import { Build, LocalDrink } from "@mui/icons-material";
+import LocalShippingIcon from "@mui/icons-material/LocalShipping";
 import axios from "axios";
 
 import { ServerContext } from "../context";
@@ -52,9 +53,9 @@ const ProcessDetails = () => {
             <Grid container>
               {process.process_sequence.map((step, index) => {
                 let icon, label, itemName, quantity;
-                if (step.startsWith("move")) {
-                  icon = <DirectionsRun sx={{ mr: 1 }} />;
-                  label = "Move";
+                if (step.startsWith("deliver")) {
+                  icon = <LocalShippingIcon sx={{ mr: 1 }} />;
+                  label = "Deliver";
                 } else if (step.startsWith("grind")) {
                   icon = <Build sx={{ mr: 1 }} />;
                   label = "Grind";

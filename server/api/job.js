@@ -17,16 +17,14 @@ app.get("/jobs", async (req, res) => {
 });
 
 app.post("/jobs", async (req, res) => {
-  const { jobName, jobDescription, machine, qty, batchNumber, process } =
-    req.body;
+  const { jobName, jobDescription, machine, batchNumber, process } = req.body;
   try {
     const jobSQL =
-      "INSERT INTO jobs (job_name, job_description, machine, qty, batch_number, process_id) VALUES (?, ?, ?, ?, ?, ?)";
+      "INSERT INTO jobs (job_name, job_description, machine, batch_number, process_id) VALUES (?, ?, ?, ?, ?)";
     const jobValues = [
       jobName,
       jobDescription,
       machine,
-      qty,
       batchNumber,
       JSON.stringify(process),
     ];

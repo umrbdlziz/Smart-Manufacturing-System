@@ -19,7 +19,7 @@ const Dashboard = () => {
   return (
     <Container maxWidth="lg" style={{ marginTop: "20px" }}>
       <Typography variant="h4" gutterBottom>
-        Production Control Dashboard
+        Machine Performance
       </Typography>
       <Grid container spacing={4}>
         <Grid item xs={12} md={6}>

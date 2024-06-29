@@ -99,7 +99,7 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
   javascriptGenerator.forBlock["movement"] = function (block) {
     const placeTo = block.getFieldValue("place_to");
     const placeFrom = block.getFieldValue("place_from");
-    return `move from ${placeFrom} to ${placeTo}`;
+    return `deliver from ${placeFrom} to ${placeTo}`;
   };
 
   javascriptGenerator.forBlock["grinding"] = function (block) {

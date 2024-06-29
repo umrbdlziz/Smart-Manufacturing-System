@@ -58,7 +58,6 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
         "job_name"	TEXT NOT NULL,
         "job_description"	TEXT NOT NULL,
         "machine"	TEXT NOT NULL,
-        "qty"	INTEGER NOT NULL,
         "batch_number"	TEXT NOT NULL,
         "process_id"	INTEGER NOT NULL,
         FOREIGN KEY("process_id") REFERENCES "processes"("process_id")
