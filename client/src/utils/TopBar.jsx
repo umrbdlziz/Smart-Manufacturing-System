@@ -19,6 +19,7 @@ import WorkIcon from "@mui/icons-material/Work";
 import MonitorIcon from "@mui/icons-material/Monitor";
 import AccountTreeIcon from "@mui/icons-material/AccountTree";
 import PrecisionManufacturingIcon from "@mui/icons-material/PrecisionManufacturing";
+import SettingsIcon from "@mui/icons-material/Settings";
 
 import NanoIcon from "/NanoIcon.png";
 import NanoLogo from "/CompanyLogo.png";
@@ -90,6 +91,12 @@ const CustomDrawer = ({ drawerOpen, toggleDrawer }) => {
               <AccountTreeIcon style={{ color: "#EFF1ED" }} />
             </ListItemIcon>
             <ListItemText primary="Process Control" />
+          </ListItem>
+          <ListItem button onClick={() => handleUserClick("/setting")}>
+            <ListItemIcon>
+              <SettingsIcon style={{ color: "#EFF1ED" }} />
+            </ListItemIcon>
+            <ListItemText primary="Setting" />
           </ListItem>
         </List>
         <Divider />

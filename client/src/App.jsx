@@ -6,11 +6,12 @@ import {
   Dashboard,
   ProcessControl,
   MachineInfo,
+  SettingPage,
 } from "./pages";
 import { TopBar } from "./utils";
 import { ServerContext } from "./context";
 
-const SERVER_URL = "http://192.168.0.208:5003";
+const SERVER_URL = "http://192.168.0.48:5003";
 
 function App() {
   return (
@@ -26,6 +27,7 @@ function App() {
           <Route path="/job-assignment" element={<JobAssignment />} />
           <Route path="/process-control" element={<ProcessControl />} />
           <Route path="/machine-info" element={<MachineInfo />} />
+          <Route path="/setting" element={<SettingPage />} />
         </Routes>
       </Router>
     </ServerContext.Provider>

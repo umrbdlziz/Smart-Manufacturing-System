@@ -121,6 +121,8 @@ async function setupMachineRoutes() {
 // Connect to each machine and setup a single route for all nodes
 async function setupMachineInfoRoute() {
   app.get("/machine-info", async (req, res) => {
+    let machineInfo = [];
+    let message = "";
     const machines = await getMachines();
     machines.forEach((machine) => {
       opcuaClientManager.connectToServer(
@@ -129,7 +131,7 @@ async function setupMachineInfoRoute() {
       );
     });
     try {
-      const machineInfo = await Promise.all(
+      machineInfo = await Promise.all(
         machines.map(async (machine) => {
           const machineData = {
             machineId: machine.machine_name,
@@ -172,10 +174,10 @@ async function setupMachineInfoRoute() {
           return machineData;
         })
       );
-      res.json(machineInfo);
     } catch (error) {
-      res.status(500).json({ error: error.message });
+      message = error.message;
     }
+    res.json({ message, machineInfo });
   });
 }
 

@@ -46,93 +46,122 @@ const MachineInfo = () => {
     }));
   };
 
-  useEffect(() => {
-    // Simulate fetching data from an endpoint by directly setting the machines state with dummy data
-    const dummyData = [
-      {
-        machineId: "GrindSmart620XS",
-        nodes: {
-          "machine-status": "Production",
-          "machine-type": "GrindSmart8XX",
-          "grinding-temperature": 35,
-          "coolant-temperature": 22,
-          "outside-above-temperature": 25,
-          "outside-below-temperature": 20,
-          "running-cycle-time": 120,
-          "end-of-production": "2023-12-31",
-        },
-      },
-      {
-        machineId: "GrindSmart528XS",
-        nodes: {
-          "machine-status": "Shutdown",
-          "machine-type": "GrindSmart8XX",
-          "grinding-temperature": 30,
-          "coolant-temperature": 18,
-          "outside-above-temperature": 28,
-          "outside-below-temperature": 23,
-          "running-cycle-time": 290,
-          "end-of-production": "2023-11-30",
-        },
-      },
-      {
-        machineId: "GrindSmart830XW",
-        nodes: {
-          "machine-status": "Production",
-          "machine-type": "GrindSmart8XX",
-          "grinding-temperature": 40,
-          "coolant-temperature": 20,
-          "outside-above-temperature": 30,
-          "outside-below-temperature": 25,
-          "running-cycle-time": 150,
-          "end-of-production": "2024-01-15",
-        },
-      },
-    ];
+  // Simulate fetching data from an endpoint by directly setting the machines state with dummy data
+  // useEffect(() => {
+  //   const dummyData = [
+  //     {
+  //       machineId: "GrindSmart620XS",
+  //       nodes: {
+  //         "machine-status": "Production",
+  //         "machine-type": "GrindSmart8XX",
+  //         "grinding-temperature": 35,
+  //         "coolant-temperature": 22,
+  //         "outside-above-temperature": 25,
+  //         "outside-below-temperature": 20,
+  //         "running-cycle-time": 120,
+  //         "end-of-production": "2023-12-31",
+  //       },
+  //     },
+  //     {
+  //       machineId: "GrindSmart528XS",
+  //       nodes: {
+  //         "machine-status": "Shutdown",
+  //         "machine-type": "GrindSmart8XX",
+  //         "grinding-temperature": 30,
+  //         "coolant-temperature": 18,
+  //         "outside-above-temperature": 28,
+  //         "outside-below-temperature": 23,
+  //         "running-cycle-time": 290,
+  //         "end-of-production": "2023-11-30",
+  //       },
+  //     },
+  //     {
+  //       machineId: "GrindSmart830XW",
+  //       nodes: {
+  //         "machine-status": "Production",
+  //         "machine-type": "GrindSmart8XX",
+  //         "grinding-temperature": 40,
+  //         "coolant-temperature": 20,
+  //         "outside-above-temperature": 30,
+  //         "outside-below-temperature": 25,
+  //         "running-cycle-time": 150,
+  //         "end-of-production": "2024-01-15",
+  //       },
+  //     },
+  //   ];
 
-    setMachines(dummyData);
-  }, []);
+  //   setMachines(dummyData);
+  // }, []);
 
   // useEffect(() => {
   //   axios
   //     .get(`${SERVER_URL}/api/machine-info`)
   //     .then((response) => {
-  //       // console.log(response.data);
-  //       setMachines(response.data);
+  //       console.log(response.data);
+  //       // setMachines(response.data);
   //     })
   //     .catch((error) => {
   //       console.log(error);
   //     });
   // }, [machines, SERVER_URL]);
 
-  // // get the waypoint from building map rmf endpoint
-  // useEffect(() => {
-  //   const findWaypoints = (waypoints) => {
-  //     return waypoints.filter((waypoint) => waypoint.name !== "");
-  //   };
+  // get the waypoint from building map rmf endpoint
+  useEffect(() => {
+    const findWaypoints = (waypoints) => {
+      return waypoints.filter((waypoint) => waypoint.name !== "");
+    };
 
-  //   axios
-  //     .get(`${SERVER_URL}/api/rmf/building-map`)
-  //     .then((response) => {
-  //       setWaypoints(
-  //         findWaypoints(response.data.map.levels[0].nav_graphs[0].vertices)
-  //       );
-  //     })
-  //     .catch((error) => {
-  //       console.log(error);
-  //     });
-  // }, [SERVER_URL]);
+    axios
+      .get(`${SERVER_URL}/api/rmf/building-map`)
+      .then((response) => {
+        setWaypoints(
+          findWaypoints(response.data.map.levels[0].nav_graphs[0].vertices)
+        );
+      })
+      .catch((error) => {
+        console.log(error);
+      });
+  }, [SERVER_URL]);
 
-  // useEffect(() => {
-  //   axios
-  //     .get(`${SERVER_URL}/api/machines`)
-  //     .then((response) => {
-  //       // console.log(response.data);
-  //     })
-  //     .catch((err) => {
-  //       console.log("Error get machines: ", err.message);
-  //     });
-  // });
+  useEffect(() => {
+    axios
+      .get(`${SERVER_URL}/api/machines`)
+      .then((res) => {
+        console.log(res.data);
+        axios
+          .get(`${SERVER_URL}/api/machine-info`)
+          .then((response) => {
+            console.log(response.data);
+            if (response.data.message == "") {
+              setMachines(response.data);
+            } else {
+              const noMachine = [];
+              res.data.forEach((machine) => {
+                noMachine.push({
+                  machineId: machine.machine_name,
+                  nodes: {
+                    "machine-status": "Not connected",
+                    "machine-type": "Unknown",
+                    "grinding-temperature": 0,
+                    "coolant-temperature": 0,
+                    "outside-above-temperature": 0,
+                    "outside-below-temperature": 0,
+                    "running-cycle-time": 0,
+                    "end-of-production": "Unknown",
+                  },
+                });
+              });
+              setMachines(noMachine);
+            }
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+      })
+      .catch((err) => {
+        console.log("Error get machines: ", err.message);
+      });
+  }, [SERVER_URL]);
 
   const handleAddMachine = () => {
     axios
