@@ -35,6 +35,11 @@ let db = new sqlite3.Database(DBSOURCE, (err) => {
             "192.168.1.0:0",
             "IP address of robot server",
           ]);
+          db.run(sql, [
+            "fleet address",
+            "192.168.1.90:8000",
+            "IP address of RMF web server",
+          ]);
         }
       }
     );

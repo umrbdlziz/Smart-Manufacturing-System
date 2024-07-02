@@ -1,6 +1,7 @@
 const express = require("express");
 const app = express();
 const db = require("../models/connectdb");
+const { fleet } = require("./fleet");
 
 app.use(express.urlencoded({ extended: false }));
 app.use(express.json());
@@ -29,6 +30,37 @@ app.post("/jobs", async (req, res) => {
       JSON.stringify(process),
     ];
     const jobResult = await db.executeRunSQL(jobSQL, jobValues);
+
+    process.forEach(async (process_id) => {
+      const processSQL = "SELECT * FROM processes WHERE process_id = ?";
+      const processResult = await db.executeGetSQL(processSQL, process_id);
+
+      // console.log(JSON.parse(processResult.process_sequence));
+      const sleep = (ms) => new Promise((resolve) => setTimeout(resolve, ms));
+
+      (async () => {
+        const actions = JSON.parse(processResult.process_sequence);
+        for (const action of actions) {
+          if (action.startsWith("deliver")) {
+            const jsonPart = action
+              .substring(action.indexOf("{"))
+              .replace(/'/g, '"')
+              .replace(/([a-zA-Z0-9]+):/g, '"$1":')
+              .replace(/: ([a-zA-Z0-9]+)/g, ': "$1"');
+            const actionObj = JSON.parse(jsonPart);
+            await fleet(
+              "deliver",
+              actionObj.from,
+              actionObj.to,
+              actionObj.quantity
+            );
+          } else if (action.startsWith("grind") || action.startsWith("clean")) {
+            console.log(action.startsWith("grind") ? "grind" : "clean");
+            await sleep(30000); // Wait for 30 sec
+          }
+        }
+      })();
+    });
 
     res.send(jobResult);
   } catch (error) {

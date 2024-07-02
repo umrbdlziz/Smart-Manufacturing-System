@@ -24,7 +24,7 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
   Blockly.defineBlocksWithJsonArray([
     {
       type: "movement",
-      message0: "Deliver from %1 to %2",
+      message0: "Deliver from %1 to %2 quantity %3",
       args0: [
         {
           type: "field_input",
@@ -35,6 +35,12 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
           type: "field_input",
           name: "place_to",
           text: "L2",
+        },
+        {
+          type: "field_number",
+          name: "quantity",
+          value: 1,
+          precision: 1,
         },
       ],
       previousStatement: null,
@@ -99,7 +105,8 @@ const BlocklyComponent = ({ handlePatternSave, children }) => {
   javascriptGenerator.forBlock["movement"] = function (block) {
     const placeTo = block.getFieldValue("place_to");
     const placeFrom = block.getFieldValue("place_from");
-    return `deliver from ${placeFrom} to ${placeTo}`;
+    const quantity = block.getFieldValue("quantity");
+    return `deliver: {from: ${placeFrom}, to: ${placeTo}, quantity: ${quantity}}`;
   };
 
   javascriptGenerator.forBlock["grinding"] = function (block) {
